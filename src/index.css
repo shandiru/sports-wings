@@ -1,0 +1,69 @@
+/* Design tokens, fonts, type scale and shared component classes. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --black: 10 10 10; --black-soft: 20 20 20; --charcoal: 28 28 28;
+    --gold: 201 150 63; --gold-light: 232 200 121; --gold-deep: 154 111 42;
+    --ash: 140 140 140; --ash-light: 217 214 208; --ash-dark: 42 42 42; --bone: 244 241 234;
+  }
+  html { background: rgb(var(--black)); color: rgb(var(--ash-light)); scroll-behavior: auto; overflow-x: clip; scrollbar-gutter: stable; }
+  body, #root { min-width: 0; overflow-x: clip; }
+  body { font-family: Manrope, system-ui, 'Segoe UI', sans-serif; font-size: 1.0625rem; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: Archivo, 'Arial Narrow', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; }
+  :focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 3px; }
+  ::selection { background: rgb(var(--gold)); color: rgb(var(--black)); }
+}
+
+@layer components {
+  .section { padding-block: clamp(80px, 12vw, 160px); }
+  .h-hero { font-size: clamp(2.75rem, 7vw, 6rem); font-weight: 800; }
+  .h-section { font-size: clamp(2rem, 4.2vw, 3.5rem); }
+  .eyebrow { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--ash)); }
+  .prose-line { max-width: 62ch; }
+  .btn-gold, .btn-dark {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 48px; padding: 0 1.75rem;
+    font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; cursor: pointer;
+  }
+  .btn-gold {
+    color: rgb(var(--black));
+    background-image: linear-gradient(105deg, rgb(var(--gold)) 0 50%, rgb(var(--gold-light)) 50% 100%);
+    background-size: 220% 100%; background-position: 0 0; transition: background-position 0.5s ease;
+  }
+  .btn-gold:hover { background-position: 100% 0; }
+  .btn-dark { background: rgb(var(--black)); color: rgb(var(--bone)); transition: background 0.3s; }
+  .btn-dark:hover { background: rgb(var(--ash-dark)); }
+  .btn-text {
+    display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; font-weight: 600; color: rgb(var(--ash-light));
+    border-bottom: 1px solid rgb(var(--ash-dark)); transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-text:hover { border-color: rgb(var(--gold)); color: rgb(var(--gold-light)); }
+  .field { width: 100%; min-height: 48px; padding: 0.75rem 1rem; background: rgb(var(--black-soft)); border: 1px solid rgb(var(--ash-dark)); color: rgb(var(--ash-light)); border-radius: 2px; }
+  .field:focus { border-color: rgb(var(--gold)); outline: none; }
+  .underline-slide { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.5s ease; }
+  .group:hover .underline-slide { background-size: 100% 1px; }
+}
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 50s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+.arrival-card { border: 1px solid rgb(var(--ash-dark)); background: rgb(var(--black-soft)); transition: transform 350ms ease, border-color 350ms ease, box-shadow 350ms ease; }
+.arrival-card > a:last-child { margin-top: 0; padding: 1.25rem 2.5rem 1.25rem 1rem; }
+.arrival-card > a:last-child h3 { font-size: 1.125rem; line-height: 1.3; }
+.arrival-card:focus-within { border-color: rgb(var(--gold)); }
+@media (hover: hover) and (pointer: fine) {
+  .arrival-card:hover { transform: translateY(-5px); border-color: rgb(var(--gold) / 0.65); box-shadow: 0 16px 36px rgb(0 0 0 / 0.22); }
+}
+
+/* The gallery remains visible if scroll animation is unavailable or disabled. */
+@media (prefers-reduced-motion: reduce) {
+  .arrival-gallery > * { opacity: 1 !important; transform: none !important; }
+  .arrival-card { transform: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}
