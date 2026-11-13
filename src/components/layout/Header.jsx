@@ -1,5 +1,5 @@
 // Sticky header: transparent over the hero, solid after 80px, hides on scroll down.
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, Search, ShoppingBag } from 'lucide-react';
@@ -17,6 +17,7 @@ export default function Header() {
   const [menu, setMenu] = useState(false);
   const [bar, setBar] = useState(true);
   const [search, setSearch] = useState(false);
+  const closeMenu = useCallback(() => setMenu(false), []);
   const last = useRef(0);
   const navigate = useNavigate();
   const { count, setOpen } = useCart();
@@ -42,7 +43,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-500 ${hidden ? '-translate-y-full' : ''}`}>
+      <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-500 ${hidden && !menu ? '-translate-y-full' : ''}`}>
         {bar && <AnnouncementBar onClose={() => setBar(false)} />}
         <div className={`border-b transition-colors duration-300 ${scrolled ? 'border-gold/40 bg-black' : 'border-transparent bg-transparent'}`}>
           <div className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between gap-2 px-4 sm:gap-6 sm:px-6">
@@ -58,7 +59,7 @@ export default function Header() {
                 <ShoppingBag size={22} strokeWidth={1.5} />
                 {count > 0 && <motion.span key={count} initial={{ scale: 1.6 }} animate={{ scale: 1 }} transition={{ duration: 0.4 }} className="absolute right-0.5 top-1 flex h-[18px] min-w-[18px] items-center justify-center bg-gold px-1 text-[0.75rem] font-bold text-black">{count}</motion.span>}
               </button>
-              <button className={`${iconBtn} lg:hidden`} aria-label="Open menu" aria-expanded={menu} aria-controls="mobile-menu" onClick={() => setMenu(true)}><Menu size={24} strokeWidth={1.5} /></button>
+              <button type="button" className={`${iconBtn} lg:hidden`} aria-label="Open menu" aria-haspopup="dialog" aria-expanded={menu} aria-controls="mobile-menu" onClick={() => { setSearch(false); setMenu(true); }}><Menu size={24} strokeWidth={1.5} /></button>
             </div>
           </div>
           {search && (
@@ -68,7 +69,7 @@ export default function Header() {
           )}
         </div>
       </header>
-      <MobileMenu open={menu} onClose={() => setMenu(false)} />
+      <MobileMenu open={menu} onClose={closeMenu} />
     </>
   );
 }
